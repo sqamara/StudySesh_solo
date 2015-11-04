@@ -15,16 +15,16 @@ public class StudyGroupModel {
     public String location = "";
     public int cap = 0;
     public String description = "";
-    int members;
+    int members = 0;
 
-    StudyGroupModel(String name) {
-        owner = "you";
-        theClass = name;
+    StudyGroupModel(String inputOwner, String inputClass, String inputLocation, int inputCapacity, String inputDescription) {
+        owner = inputOwner;
+        theClass = inputClass;
         dateFormat = new SimpleDateFormat("hh:mm a");
-        location = "Here";
-        cap = 6;
+        location = inputLocation;
+        cap = inputCapacity;
         members = 1;
-        description = "let's study " + theClass + "!";
+        description = inputDescription;
     }
 
     public String toString() {

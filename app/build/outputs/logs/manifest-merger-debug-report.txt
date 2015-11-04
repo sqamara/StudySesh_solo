@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:2:1-37:12
+ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:2:1-42:12
 	package
 		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:3:5-30
 		INJECTED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml
@@ -26,7 +26,7 @@ ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/An
 	android:name
 		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:8:22-69
 application
-ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:10:5-35:19
+ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:10:5-40:19
 MERGED from [com.android.support:appcompat-v7:23.0.1] /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:design:23.0.1] /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/AndroidManifest.xml:22:5-20
@@ -77,6 +77,14 @@ ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/An
 		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:33:13-56
 	android:name
 		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:31:13-39
+activity#team8.studysesh.EnterGroupInfo
+ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:35:9-39:20
+	android:label
+		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:37:13-68
+	android:theme
+		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:38:13-56
+	android:name
+		ADDED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml:36:13-43
 uses-sdk
 INJECTED from /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.0.1] /Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:20:5-43

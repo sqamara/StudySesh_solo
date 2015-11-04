@@ -24,4 +24,5 @@
 
     <string name="title_activity_list_view">Available Study Groups</string>
     <string name="title_activity_list_groups">ListGroups</string>
+    <string name="title_activity_enter_group_info">EnterGroupInfo</string>
 </resources>

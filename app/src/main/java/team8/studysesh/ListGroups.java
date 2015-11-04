@@ -3,6 +3,7 @@ package team8.studysesh;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,10 +21,10 @@ import java.util.ArrayList;
 public class ListGroups extends ListActivity {
 
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-    ArrayList<StudyGroupModel> listItems=new ArrayList<StudyGroupModel>();
+    public static final ArrayList<StudyGroupModel> listItems=new ArrayList<StudyGroupModel>();
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
-    ArrayAdapter<StudyGroupModel> adapter;
+    public static ArrayAdapter<StudyGroupModel> adapter;
 
     private String m_Text = "";
 
@@ -41,7 +42,8 @@ public class ListGroups extends ListActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewStudyGroup(view);
+                goToEnterGroupInfo(); // using new intent
+                //addNewStudyGroup(view); // using dialog box
             }
         });
     }
@@ -62,33 +64,40 @@ public class ListGroups extends ListActivity {
         builder.show();
     }
 
-    private void addNewStudyGroup(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Class Name");
+// old impl using dialog box
+//    private void addNewStudyGroup(View view) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Class Name");
+//
+//        // Set up the input
+//        final EditText input = new EditText(this);
+//        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//        builder.setView(input);
+//
+//        // Set up the buttons
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                goToEnterGroupInfo();
+//                m_Text = input.getText().toString();
+//                listItems.add(0, new StudyGroupModel(LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex)));
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        builder.show();
+//    }
 
-        // Set up the input
-        final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                m_Text = input.getText().toString();
-                listItems.add(0, new StudyGroupModel(m_Text));
-                adapter.notifyDataSetChanged();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+    public void goToEnterGroupInfo() {
+        Intent intent = new Intent(this, EnterGroupInfo.class);
+        startActivity(intent);
     }
 
 }

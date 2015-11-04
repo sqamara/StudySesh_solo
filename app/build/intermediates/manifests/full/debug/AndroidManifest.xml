@@ -38,6 +38,11 @@
             android:label="@string/title_activity_list_groups"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name="team8.studysesh.EnterGroupInfo"
+            android:label="@string/title_activity_enter_group_info"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

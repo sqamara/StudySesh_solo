@@ -319,6 +319,7 @@
     <string name="status_bar_notification_info_overflow">999+</string>
     <!-- From: file:/Users/sebastian/AndroidStudioProjects/StudySesh_solo/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="title_activity_enter_group_info">EnterGroupInfo</string>
     <string name="title_activity_list_groups">ListGroups</string>
     <string name="title_activity_list_view">Available Study Groups</string>
     <string name="title_activity_login">Login</string>

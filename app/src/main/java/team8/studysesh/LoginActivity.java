@@ -51,11 +51,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>(){{
+    public static final ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>(){{
             add("foo@example.com:hello");
             add("bar@example.com:world");
             add("sqamara@ucsd.edu:12345");
     }};
+    public static int userIndex = -1;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -406,7 +407,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 goToHome();
-                finish();
+                //finish();
             } else {
                 mPasswordView.requestFocus();
                 mEmailView.requestFocus();
@@ -452,6 +453,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             DUMMY_CREDENTIALS.add(mEmail + ":" + mPassword);
+            userIndex = DUMMY_CREDENTIALS.size()-1;
             return true;
         }
 
