@@ -48,18 +48,26 @@ public class ListGroups extends ListActivity {
         });
     }
     @Override
-    protected void onListItemClick (ListView l, View v, int position, long id) {
+    protected void onListItemClick (ListView l, View v, final int position, long id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Description:");
-        builder.setMessage(listItems.get(position).description);
+        builder.setMessage(listItems.get(position).description + "\nOwner: " + listItems.get(position).owner);
 
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
+        builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteGroup(position);
+                dialog.cancel();
+            }
+        });
+
 
         builder.show();
     }
@@ -98,6 +106,13 @@ public class ListGroups extends ListActivity {
     public void goToEnterGroupInfo() {
         Intent intent = new Intent(this, EnterGroupInfo.class);
         startActivity(intent);
+    }
+
+    private void deleteGroup(int position) {
+        if (listItems.get(position).owner.equals(LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])) {
+            listItems.remove(position);
+            ListGroups.adapter.notifyDataSetChanged();
+        }
     }
 
 }

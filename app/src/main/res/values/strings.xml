@@ -23,6 +23,6 @@
     </string>
 
     <string name="title_activity_list_view">Available Study Groups</string>
-    <string name="title_activity_list_groups">ListGroups</string>
-    <string name="title_activity_enter_group_info">EnterGroupInfo</string>
+    <string name="title_activity_list_groups">Available Study Groups</string>
+    <string name="title_activity_enter_group_info">Enter Study Group Details</string>
 </resources>
