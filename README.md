@@ -26,4 +26,4 @@ close the project and reopen so that the gradel reruns
 
 ##### more notes coming!
 
-
+I edited the read me! - harry
