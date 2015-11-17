@@ -11,12 +11,12 @@ public class StudyGroupModel {
 
     public String owner = "";
     public String theClass = "";
-    private DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+    public DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
     public String location = "";
     public int cap = 0;
     public String description = "";
     public int members = 0;
-    private Date theDate = new Date();
+    public Date theDate = new Date();
 
     StudyGroupModel(String inputOwner, String inputClass, String inputLocation, int inputCapacity, String inputDescription) {
         owner = inputOwner;

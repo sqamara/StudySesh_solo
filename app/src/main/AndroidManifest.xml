@@ -37,6 +37,16 @@
             android:label="@string/title_activity_enter_group_info"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".displayGroupInfo"
+            android:label="@string/title_activity_display_group_info"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".DisplayGroupInfo"
+            android:label="@string/title_activity_display_group_info"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
