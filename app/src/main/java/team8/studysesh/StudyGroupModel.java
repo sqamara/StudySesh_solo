@@ -11,7 +11,7 @@ public class StudyGroupModel {
 
     public String owner = "";
     public String theClass = "";
-    DateFormat dateFormat;
+    static DateFormat dateFormat;
     public String location = "";
     public int cap = 0;
     public String description = "";
