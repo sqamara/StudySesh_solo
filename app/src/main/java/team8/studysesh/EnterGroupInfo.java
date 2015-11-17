@@ -53,13 +53,12 @@ public class EnterGroupInfo extends AppCompatActivity {
                     inputDescription = "Let's study " + inputClass;
 
 
-                ListGroups.listItems.add(new StudyGroupModel(
+                ListGroups.listItems.add(0, new StudyGroupModel(
                         inputOwner,
                         inputClass,
                         inputLocation,
                         inputCapacity,
-                        inputDescription
-                ));
+                        inputDescription));
 
                 ListGroups.adapter.notifyDataSetChanged();
                 finish();
