@@ -16,7 +16,8 @@
         android:layout_marginTop="65dp"
         android:hint="Class name"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:inputType="text"/>
 
     <EditText
         android:layout_width="300dp"
@@ -24,7 +25,8 @@
         android:id="@+id/location"
         android:layout_below="@+id/theClass"
         android:layout_centerHorizontal="true"
-        android:hint="Location" />
+        android:hint="Location"
+        android:inputType="text"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -45,7 +47,8 @@
         android:id="@+id/description"
         android:layout_below="@+id/capacity"
         android:layout_centerHorizontal="true"
-        android:hint="Description" />
+        android:hint="Description"
+        android:inputType="text"/>
 </RelativeLayout>
 
 
