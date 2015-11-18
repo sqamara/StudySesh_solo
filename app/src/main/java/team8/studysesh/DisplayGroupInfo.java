@@ -24,6 +24,7 @@ public class DisplayGroupInfo extends AppCompatActivity {
         FloatingActionButton join = (FloatingActionButton) findViewById(R.id.Join);
         FloatingActionButton delete = (FloatingActionButton) findViewById(R.id.Delete);
 
+        //TODO: figure out how to make buttons not show
         if (ListGroups.listItems.get(selectedGroup).owner.equals(
                 LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])){
             // allow to delete but not join
@@ -40,6 +41,17 @@ public class DisplayGroupInfo extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                //TODO: figure out structure for joining
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ListGroups.listItems.get(selectedGroup).owner.equals(LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])) {
+                    ListGroups.listItems.remove(selectedGroup);
+                    ListGroups.adapter.notifyDataSetChanged();
+                    finish();
+                }
             }
         });
 
