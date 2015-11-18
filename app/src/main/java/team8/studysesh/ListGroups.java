@@ -16,6 +16,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.ArrayList;
 
 public class ListGroups extends ListActivity {
@@ -35,7 +50,13 @@ public class ListGroups extends ListActivity {
 
         adapter=new ArrayAdapter<StudyGroupModel>(this,
                 android.R.layout.simple_list_item_1,
-                listItems);
+                listItems) {
+        @Override
+            public void notifyDataSetChanged() {
+                updateList();
+                super.notifyDataSetChanged();
+        }
+        };
         setListAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -46,6 +67,9 @@ public class ListGroups extends ListActivity {
                 //addNewStudyGroup(view); // using dialog box
             }
         });
+
+        adapter.notifyDataSetChanged();
+
     }
     @Override
     protected void onListItemClick (ListView l, View v, final int position, long id) {
@@ -113,6 +137,111 @@ public class ListGroups extends ListActivity {
             listItems.remove(position);
             ListGroups.adapter.notifyDataSetChanged();
         }
+    }
+
+    // MUST TAKE JSON ARRAY
+    public List<SingleEventData> getDataForListView(JsonObject json_array){
+        List<SingleEventData> list_events = new ArrayList<SingleEventData>();
+        String json_str =  json_array.getAsJsonArray("events").toString();
+
+        try {
+            // Turning our JsonObject to a JSONArray
+            JSONArray jsonArray = new JSONArray(json_str);
+
+            // Parsing the JSONArray
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj1 = jsonArray.getJSONObject(i);
+
+                //Instantiate event object
+                SingleEventData new_event = new SingleEventData(obj1);
+
+                list_events.add(new_event);
+            }
+
+        } catch (JSONException je) {
+            StringWriter writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
+            je.printStackTrace(printWriter);
+            printWriter.flush();
+            //debugMessage(writer.toString());
+        }
+
+        return list_events;
+    }
+
+    public class SingleEventData{
+        public final static String TITLE = "title";
+        public final static String START_TIME = "start_time";
+        public final static String LOCATION = "location";
+        public final static String CAPACITY = "capacity";
+        public final static String DESCRIPTION = "description";
+        public final static String ID = "id";
+        public final static String OWNER = "owner";
+        public final static String MEMBERS = "members";
+
+        public SingleEventData(JSONObject json_event){
+            try {
+                course_title = json_event.get(TITLE).toString();
+                start_time = json_event.get(START_TIME).toString();
+                location = json_event.get(LOCATION).toString();
+                capacity = json_event.get(CAPACITY).toString();
+                description = json_event.get(DESCRIPTION).toString();
+                id = json_event.get(ID).toString();
+                owner = json_event.get(OWNER).toString();
+                members = json_event.get(MEMBERS).toString();
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+
+        String course_title;
+        String start_time;
+        String location;
+        String capacity;
+        String description;
+        String id;
+        String owner;
+        String members;
+    }
+    public void updateList() {
+        Ion.with(this)
+                .load("http://198.199.98.53/scripts/get_event_data.php")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    // PERFORM MAIN OPERATIONS HERE
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        //Create a List of events
+                        List<SingleEventData> list_events = getDataForListView(result);
+                        listItems.clear();
+
+                        for (int i = list_events.size() - 1; i >= 0; --i) {
+                            SingleEventData data = list_events.get(i);
+                            StudyGroupModel element = new StudyGroupModel(data.owner,
+                                    data.course_title, data.location,
+                                    Integer.parseInt(data.capacity),
+                                    data.description,
+                                    data.start_time);
+                            listItems.add(element);
+                        }
+                        adapter.notifyDataSetChanged();
+                        /*
+                        ArrayList<String> desc_list_events = new ArrayList<String>();
+
+                        // Grabbing only descriptions
+                        for (int i = list_events.size() - 1; i >= 0; i--) {
+                            desc_list_events.add(list_events.get(i).description);
+                        }
+
+                        String[] str_desc_list_events = desc_list_events.toArray(new String[list_events.size()]);
+                        //Build Adapter
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.event_item, str_desc_list_events);
+
+                        //Configure List View
+                        ListView list = (ListView) findViewById(R.id.list_events);
+                        list.setAdapter(adapter);*/
+                    }
+                });
     }
 
 }
