@@ -50,7 +50,13 @@ public class ListGroups extends ListActivity {
 
         adapter=new ArrayAdapter<StudyGroupModel>(this,
                 android.R.layout.simple_list_item_1,
-                listItems);
+                listItems) {
+        @Override
+            public void notifyDataSetChanged() {
+                updateList();
+                super.notifyDataSetChanged();
+        }
+        };
         setListAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,40 +68,8 @@ public class ListGroups extends ListActivity {
             }
         });
 
-        Ion.with(this)
-                .load("http://198.199.98.53/scripts/get_event_data.php")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    // PERFORM MAIN OPERATIONS HERE
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        //Create a List of events
-                        List<SingleEventData> list_events = getDataForListView(result);
-                        listItems.clear();
+        adapter.notifyDataSetChanged();
 
-                        for (int i = list_events.size() - 1; i >= 0; --i) {
-                            SingleEventData data = list_events.get(i);
-                            StudyGroupModel element = new StudyGroupModel(data.owner, data.course_title, data.location, Integer.parseInt(data.capacity), data.description);
-                            listItems.add(element);
-                        }
-                        adapter.notifyDataSetChanged();
-                        /*
-                        ArrayList<String> desc_list_events = new ArrayList<String>();
-
-                        // Grabbing only descriptions
-                        for (int i = list_events.size() - 1; i >= 0; i--) {
-                            desc_list_events.add(list_events.get(i).description);
-                        }
-
-                        String[] str_desc_list_events = desc_list_events.toArray(new String[list_events.size()]);
-                        //Build Adapter
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.event_item, str_desc_list_events);
-
-                        //Configure List View
-                        ListView list = (ListView) findViewById(R.id.list_events);
-                        list.setAdapter(adapter);*/
-                    }
-                });
     }
     @Override
     protected void onListItemClick (ListView l, View v, final int position, long id) {
@@ -228,6 +202,46 @@ public class ListGroups extends ListActivity {
         String id;
         String owner;
         String members;
+    }
+    public void updateList() {
+        Ion.with(this)
+                .load("http://198.199.98.53/scripts/get_event_data.php")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    // PERFORM MAIN OPERATIONS HERE
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        //Create a List of events
+                        List<SingleEventData> list_events = getDataForListView(result);
+                        listItems.clear();
+
+                        for (int i = list_events.size() - 1; i >= 0; --i) {
+                            SingleEventData data = list_events.get(i);
+                            StudyGroupModel element = new StudyGroupModel(data.owner,
+                                    data.course_title, data.location,
+                                    Integer.parseInt(data.capacity),
+                                    data.description,
+                                    data.start_time);
+                            listItems.add(element);
+                        }
+                        adapter.notifyDataSetChanged();
+                        /*
+                        ArrayList<String> desc_list_events = new ArrayList<String>();
+
+                        // Grabbing only descriptions
+                        for (int i = list_events.size() - 1; i >= 0; i--) {
+                            desc_list_events.add(list_events.get(i).description);
+                        }
+
+                        String[] str_desc_list_events = desc_list_events.toArray(new String[list_events.size()]);
+                        //Build Adapter
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.event_item, str_desc_list_events);
+
+                        //Configure List View
+                        ListView list = (ListView) findViewById(R.id.list_events);
+                        list.setAdapter(adapter);*/
+                    }
+                });
     }
 
 }
