@@ -71,29 +71,37 @@ public class ListGroups extends ListActivity {
         adapter.notifyDataSetChanged();
 
     }
+
+
+
+
+
+
     @Override
     protected void onListItemClick (ListView l, View v, final int position, long id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Description:");
-        builder.setMessage(listItems.get(position).description + "\nOwner: " + listItems.get(position).owner);
-
-        // Set up the buttons
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteGroup(position);
-                dialog.cancel();
-            }
-        });
-
-
-        builder.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Description:");
+//        builder.setMessage(listItems.get(position).description + "\nOwner: " + listItems.get(position).owner);
+//
+//        // Set up the buttons
+//        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//        builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                deleteGroup(position);
+//                dialog.cancel();
+//            }
+//        });
+//
+//
+//        builder.show();
+        DisplayGroupInfo.selectedGroup = position;
+        goToDisplayGroupInfo();
     }
 
 // old impl using dialog box
@@ -129,6 +137,11 @@ public class ListGroups extends ListActivity {
 
     public void goToEnterGroupInfo() {
         Intent intent = new Intent(this, EnterGroupInfo.class);
+        startActivity(intent);
+    }
+
+    public void goToDisplayGroupInfo() {
+        Intent intent = new Intent(this, DisplayGroupInfo.class);
         startActivity(intent);
     }
 
