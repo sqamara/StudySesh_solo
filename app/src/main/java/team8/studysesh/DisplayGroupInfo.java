@@ -56,8 +56,7 @@ public class DisplayGroupInfo extends AppCompatActivity {
         });
 
         TextView tv1 = (TextView)findViewById(R.id.Started);
-        tv1.setText(ListGroups.listItems.get(selectedGroup).dateFormat.format(
-                ListGroups.listItems.get(selectedGroup).theDate).toString());
+        tv1.setText(ListGroups.listItems.get(selectedGroup).time);
 
         TextView tv2 = (TextView)findViewById(R.id.Location);
         tv2.setText(ListGroups.listItems.get(selectedGroup).location);
