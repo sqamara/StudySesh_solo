@@ -4,16 +4,20 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -55,7 +59,21 @@ public class ListGroups extends ListActivity {
             public void notifyDataSetChanged() {
                 updateList();
                 super.notifyDataSetChanged();
-        }
+            }
+        @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                String[] pieces = listItems.get(position).toString().split("<br>", 2);
+                text.setText(Html.fromHtml("<b>" + pieces[0] + "<br>" + "</b>" + "<small>" + pieces[1] + "</small>"));
+                if (position%3 == 0)
+                    view.setBackgroundColor(Color.LTGRAY);
+                else if (position%3 == 1)
+                    view.setBackgroundColor(Color.GRAY);
+                else
+                    view.setBackgroundColor(Color.DKGRAY);
+            return view;
+            }
         };
         setListAdapter(adapter);
 

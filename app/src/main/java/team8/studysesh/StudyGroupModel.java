@@ -29,8 +29,8 @@ public class StudyGroupModel {
     }
 
     public String toString() {
-        String toReturn = theClass + "\n" + "Started: "+ time
-                + "\nLocation: " + location + "\nCapacity: " + members +"/" + cap;
+        String toReturn = theClass + "<br>" + "Started: "+ time
+                + "<br>Location: " + location + "<br>Capacity: " + members +"/" + cap;
         return toReturn;
     }
 
