@@ -66,12 +66,11 @@ public class ListGroups extends ListActivity {
                 TextView text = (TextView) view.findViewById(android.R.id.text1);
                 String[] pieces = listItems.get(position).toString().split("<br>", 2);
                 text.setText(Html.fromHtml("<b>" + pieces[0] + "<br>" + "</b>" + "<small>" + pieces[1] + "</small>"));
-                if (position%3 == 0)
+                if (position%2 == 0)
                     view.setBackgroundColor(Color.LTGRAY);
-                else if (position%3 == 1)
-                    view.setBackgroundColor(Color.GRAY);
                 else
-                    view.setBackgroundColor(Color.DKGRAY);
+                    view.setBackgroundColor(Color.TRANSPARENT);
+
             return view;
             }
         };
