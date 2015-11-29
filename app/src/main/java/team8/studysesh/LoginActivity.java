@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +110,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                if (fetchLoginData())
+                    attemptLogin();
             }
 
 
@@ -117,7 +121,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptRegister();
+                if (fetchLoginData())
+                    attemptRegister();
             }
 
 
@@ -126,24 +131,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        Ion.with(this)
-                .load("http://198.199.98.53/scripts/get_user_data.php")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    // PERFORM MAIN OPERATIONS HERE
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        //Create a List of events
-                        List<SingleUserData> list_users = getDataForListView(result);
-                        DUMMY_CREDENTIALS.clear();
-
-                        for (int i = list_users.size() - 1; i >= 0; --i) {
-                            SingleUserData data = list_users.get(i);
-
-                            DUMMY_CREDENTIALS.add(data.username+":"+data.password);
-                        }
-                    }
-                });
     }
 
     private void populateAutoComplete() {
@@ -572,5 +559,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         return list_users;
     }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public boolean fetchLoginData() {
+        if (isNetworkAvailable()) {
+            Ion.with(this)
+                    .load("http://198.199.98.53/scripts/get_user_data.php")
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        // PERFORM MAIN OPERATIONS HERE
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            //Create a List of events
+                            List<SingleUserData> list_users = getDataForListView(result);
+                            DUMMY_CREDENTIALS.clear();
+
+                            for (int i = list_users.size() - 1; i >= 0; --i) {
+                                SingleUserData data = list_users.get(i);
+
+                                DUMMY_CREDENTIALS.add(data.username + ":" + data.password);
+                            }
+                        }
+                    });
+            return true;
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Internet Connection Required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+    }
+
+
 }
 
