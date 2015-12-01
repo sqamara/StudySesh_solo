@@ -58,7 +58,12 @@ public class DisplayGroupInfo extends AppCompatActivity {
                             .asString();
                     ListGroups.listItems.remove(selectedGroup);
                     ListGroups.adapter.notifyDataSetChanged();
+                    //if () { // check if using search
+                    Search.foundItems.clear();
+                    Search.adapter.notifyDataSetChanged();
+                    //}
                     finish();
+
                 }
             }
         });
