@@ -85,6 +85,15 @@ public class ListGroups extends ListActivity {
             }
         });
 
+        FloatingActionButton search = (FloatingActionButton) findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToSearchPage(); // using new intent
+                //addNewStudyGroup(view); // using dialog box
+            }
+        });
+
         adapter.notifyDataSetChanged();
 
     }
@@ -159,6 +168,11 @@ public class ListGroups extends ListActivity {
 
     public void goToDisplayGroupInfo() {
         Intent intent = new Intent(this, DisplayGroupInfo.class);
+        startActivity(intent);
+    }
+
+    public void goToSearchPage() {
+        Intent intent = new Intent(this, Search.class);
         startActivity(intent);
     }
 

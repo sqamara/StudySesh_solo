@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="team8.studysesh.ListGroups">
+    tools:context="team8.studysesh.Search">
 
     <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
@@ -12,21 +12,11 @@
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/title_activity_list_view"
+            app:title="Search Groups"
             app:titleTextColor="@color/white"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_list_groups" />
-
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_edit" />
-
-    <android.support.design.widget.FloatingActionButton android:id="@+id/search"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_search" />
+    <include layout="@layout/content_search" />
 
 </android.support.design.widget.CoordinatorLayout>
