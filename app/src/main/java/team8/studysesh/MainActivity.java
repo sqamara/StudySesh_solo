@@ -1,16 +1,15 @@
 package team8.studysesh;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,42 +22,31 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.koushikdutta.ion.Ion;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class MainActivity extends SampleActivityBase
+        implements GoogleApiClient.OnConnectionFailedListener {
 
-public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-    // Defining key values for data
-    public final static String TITLE = "title";
-    public final static String START_TIME = "start_time";
-    public final static String LOCATION = "location";
-    public final static String CAPACITY = "capacity";
-    public final static String DESCRIPTION = "description";
-    public final static String ID = "id";
-    public final static String OWNER = "owner";
-    public final static String MEMBERS = "members";
-
-    //googlemaps api
+    /**
+     * GoogleApiClient wraps our service connection to Google Play Services and provides access
+     * to the user's sign in state as well as the Google's APIs.
+     */
     protected GoogleApiClient mGoogleApiClient;
 
     private GooglePlacesAdapter mAdapter;
 
     private AutoCompleteTextView mAutocompleteView;
 
+    private TextView mPlaceDetailsText;
+
+    private TextView mPlaceDetailsAttribution;
+
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(32, 117), new LatLng(32.8810, 117.2380));
-
-
-    // ASyncTask TAG log
-    private static final String TAG = "post_event";
-
+            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Construct a GoogleApiClient for the {@link Places#GEO_DATA_API} using AutoManage
         // functionality, which automatically sets up the API client to handle Activity lifecycle
         // events. If your activity does not extend FragmentActivity, make sure to call connect()
@@ -68,7 +56,7 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
                 .addApi(Places.GEO_DATA_API)
                 .build();
 
-        setContentView(R.layout.activity_enter_group_info);
+        setContentView(R.layout.activity_google_places);
 
         // Retrieve the AutoCompleteTextView that will display Place suggestions.
         mAutocompleteView = (AutoCompleteTextView)
@@ -77,6 +65,9 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         // Register a listener that receives callbacks when a suggestion has been selected
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
+        // Retrieve the TextViews that will display details and attributions of the selected place.
+        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+        mPlaceDetailsAttribution = (TextView) findViewById(R.id.place_attribution);
 
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
@@ -85,25 +76,13 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         mAutocompleteView.setAdapter(mAdapter);
 
         // Set up the 'clear text' button that clears the text in the autocomplete view
-//        Button clearButton = (Button) findViewById(R.id.button_clear);
-//        clearButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAutocompleteView.setText("");
-//            }
-//        });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button clearButton = (Button) findViewById(R.id.button_clear);
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                postEventData(view);
+            public void onClick(View v) {
+                mAutocompleteView.setText("");
             }
         });
-
 
     }
 
@@ -162,74 +141,45 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
             // Get the Place object from the buffer.
             final Place place = places.get(0);
 
+            // Format details of the place for display and show it in a TextView.
+            mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                    place.getId(), place.getAddress(), place.getPhoneNumber(),
+                    place.getWebsiteUri()));
+
+            // Display the third party attributions if set.
+            final CharSequence thirdPartyAttribution = places.getAttributions();
+            if (thirdPartyAttribution == null) {
+                mPlaceDetailsAttribution.setVisibility(View.GONE);
+            } else {
+                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
+            }
+
             Log.i(TAG, "Place details received: " + place.getName());
 
             places.release();
         }
     };
 
-    public void postEventData(View view) {
-        EditText theClass = (EditText) findViewById(R.id.theClass);
-        if (theClass.getText().toString().matches("")) {
-            Toast.makeText(getApplicationContext(), R.string.retry_enter_group_info, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        EditText location = (EditText) findViewById(R.id.autocomplete_places);
-        EditText capacity = (EditText) findViewById(R.id.capacity);
-        EditText description = (EditText) findViewById(R.id.description);
+    private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
+                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
+        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
+                websiteUri));
 
-        String str_owner = LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0];
-        String str_courseTitle = theClass.getText().toString();
-        String str_location = mAutocompleteView.getText().toString();
-        int inputCapacity;
-        if (capacity.getText().toString().length() > 0)
-            inputCapacity = Integer.parseInt(capacity.getText().toString());
-        else
-            inputCapacity = 5;
-        String str_capacity = Integer.toString(inputCapacity);
-        String str_description;
-        if (description.getText().toString().length() > 0)
-            str_description = description.getText().toString();
-        else
-            str_description = "Lets study ";// + str_courseTitle;
-
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-        Date theDate = new Date();
-        String str_startTime = dateFormat.format(theDate).toString();
-
-        System.out.println( str_owner );
-
-        Ion.with(this)
-                .load("http://198.199.98.53/scripts/post_event_data.php")
-                .setBodyParameter(TITLE, str_courseTitle)
-                .setBodyParameter(START_TIME, str_startTime)
-                .setBodyParameter(LOCATION, str_location)
-                .setBodyParameter(CAPACITY, str_capacity)
-                .setBodyParameter(DESCRIPTION, str_description)
-                .setBodyParameter(OWNER, str_owner)
-                .asString();
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage("Success.");
-        builder1.setCancelable(true);
-        builder1.setPositiveButton("Okay",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        finish();
-                    }
-                });
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-
-        ListGroups.adapter.notifyDataSetChanged();
-        //finish();
     }
 
-
-
+    /**
+     * Called when the Activity could not connect to Google Play services and the auto manager
+     * could resolve the error automatically.
+     * In this case the API is not available and notify the user.
+     *
+     * @param connectionResult can be inspected to determine the cause of the failure
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
 
