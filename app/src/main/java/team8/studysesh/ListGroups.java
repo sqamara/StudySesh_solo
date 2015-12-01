@@ -257,7 +257,6 @@ public class ListGroups extends ListActivity {
                             element.id = data.id;
                             listItems.add(element);
                         }
-                        adapter.notifyDataSetChanged();
                         /*
                         ArrayList<String> desc_list_events = new ArrayList<String>();
 
