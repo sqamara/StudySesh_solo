@@ -254,6 +254,7 @@ public class ListGroups extends ListActivity {
                                     Integer.parseInt(data.capacity),
                                     data.description,
                                     data.start_time);
+                            element.id = data.id;
                             listItems.add(element);
                         }
                         adapter.notifyDataSetChanged();

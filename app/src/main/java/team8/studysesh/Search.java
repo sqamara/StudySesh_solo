@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Search extends ListActivity {
     public static final ArrayList<StudyGroupModel> foundItems=new ArrayList<StudyGroupModel>();
@@ -50,7 +51,18 @@ public class Search extends ListActivity {
 
     @Override
     protected void onListItemClick (ListView l, View v, final int position, long id) {
-        DisplayGroupInfo.selectedGroup = position;
+        StudyGroupModel currentModel = foundItems.get(position);
+        int i = 0;
+        for (StudyGroupModel m : ListGroups.listItems) {
+            if (m.owner.equals(currentModel.owner) &&
+                    m.description.equals(currentModel.description) &&
+                    m.location.equals(currentModel.location)
+                    )
+                break;
+            i++;
+        }
+        System.err.println(i + " : " + ListGroups.listItems.size());
+        DisplayGroupInfo.selectedGroup = i;
         goToDisplayGroupInfo();
     }
 

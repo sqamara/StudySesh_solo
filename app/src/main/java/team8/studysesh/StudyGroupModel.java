@@ -16,6 +16,7 @@ public class StudyGroupModel {
     public String description = "";
     public int members = 0;
     public String time = "";
+    public String id = "";
 
     StudyGroupModel(String inputOwner, String inputClass, String inputLocation, int inputCapacity,
                     String inputDescription, String inputTime) {
@@ -33,5 +34,4 @@ public class StudyGroupModel {
                 + "<br>Location: " + location + "<br>Capacity: " + members +"/" + cap;
         return toReturn;
     }
-
 }
