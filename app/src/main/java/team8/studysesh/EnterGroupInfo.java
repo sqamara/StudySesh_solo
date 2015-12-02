@@ -373,14 +373,14 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
     }
     private void updateStartTimeLabel() {
 
-        String myFormat = "HH:MM"; //In which you need put here
+        String myFormat = "HH:mm"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         startTimeInput.setText(sdf.format(dateTime.getTime()));
     }
     private void updateEndTimeLabel() {
 
-        String myFormat = "HH:MM"; //In which you need put here
+        String myFormat = "HH:mm"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         endTimeInput.setText(sdf.format(dateTime.getTime()));
