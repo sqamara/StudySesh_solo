@@ -54,10 +54,7 @@ public class Search extends ListActivity {
         StudyGroupModel currentModel = foundItems.get(position);
         int i = 0;
         for (StudyGroupModel m : ListGroups.listItems) {
-            if (m.owner.equals(currentModel.owner) &&
-                    m.description.equals(currentModel.description) &&
-                    m.location.equals(currentModel.location)
-                    )
+            if (m.id.equals(currentModel.id))
                 break;
             i++;
         }

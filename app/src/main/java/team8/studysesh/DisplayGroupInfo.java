@@ -46,9 +46,31 @@ public class DisplayGroupInfo extends AppCompatActivity {
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                //TODO: figure out structure for joining
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                builder1.setCancelable(true);
+                builder1.setPositiveButton("Okay",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                finish();
+                            }
+                        });
+                // if (group has no space)
+                //builder1.setMessage("Unable to join group, group is full.");
+                //else if (already joined)
+                //builder1.setMessage("Unable to join group, you have already joined.");
+                //else {
+                builder1.setMessage("Success.");
+                Ion.with(context)
+                        .load("http://198.199.98.53/scripts/post_join_event.php")
+                        .setBodyParameter("id", ListGroups.listItems.get(selectedGroup).id)
+                        .setBodyParameter("username", LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])
+                        .asString();
+                //}
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
             }
         });
         delete.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +126,7 @@ public class DisplayGroupInfo extends AppCompatActivity {
 
         TextView tv5 = (TextView)findViewById(R.id.Owner);
         tv5.setText(ListGroups.listItems.get(selectedGroup).owner);
+
     }
 
 }
