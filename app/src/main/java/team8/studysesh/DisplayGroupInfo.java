@@ -3,6 +3,7 @@ package team8.studysesh;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,7 +16,14 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DisplayGroupInfo extends AppCompatActivity {
+    final List<String> event_users = new ArrayList<>();
 
     public static int selectedGroup = -1;
     private Context context;
@@ -46,31 +54,45 @@ public class DisplayGroupInfo extends AppCompatActivity {
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setCancelable(true);
                 builder1.setPositiveButton("Okay",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
-                                finish();
                             }
                         });
-                // if (group has no space)
-                //builder1.setMessage("Unable to join group, group is full.");
-                //else if (already joined)
-                //builder1.setMessage("Unable to join group, you have already joined.");
-                //else {
-                builder1.setMessage("Success.");
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(context);
+                builder2.setCancelable(true);
+                builder2.setPositiveButton("Okay",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                            }
+                        });
+                AlertDialog alert11;
+                if (event_users.size()+1 >= ListGroups.listItems.get(selectedGroup).cap) {
+                    builder1.setMessage("Unable to join group, group is full.");
+                    alert11 = builder1.create();
+
+                }
+                else if (event_users.contains(LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])) {
+                    builder1.setMessage("Unable to join group, you have already joined.");
+                    alert11 = builder1.create();
+                }
+                else {
+                builder2.setMessage("Success.");
                 Ion.with(context)
                         .load("http://198.199.98.53/scripts/post_join_event.php")
                         .setBodyParameter("id", ListGroups.listItems.get(selectedGroup).id)
                         .setBodyParameter("username", LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])
                         .asString();
-                //}
-                AlertDialog alert11 = builder1.create();
+                    alert11 = builder2.create();
+                }
                 alert11.show();
-
             }
         });
         delete.setOnClickListener(new View.OnClickListener() {
@@ -111,8 +133,12 @@ public class DisplayGroupInfo extends AppCompatActivity {
             }
         });
 
+        String[] startEnd = ListGroups.listItems.get(selectedGroup).time.split("@");
+        String[] start = startEnd[0].split(";");
+        String[] end = startEnd[1].split(";");
+
         TextView tv1 = (TextView)findViewById(R.id.Started);
-        tv1.setText(ListGroups.listItems.get(selectedGroup).time);
+        tv1.setText(start[0]+ " " + start[1]);
 
         TextView tv2 = (TextView)findViewById(R.id.Location);
         tv2.setText(ListGroups.listItems.get(selectedGroup).location);
@@ -127,6 +153,54 @@ public class DisplayGroupInfo extends AppCompatActivity {
         TextView tv5 = (TextView)findViewById(R.id.Owner);
         tv5.setText(ListGroups.listItems.get(selectedGroup).owner);
 
+        TextView tv6 = (TextView)findViewById(R.id.End);
+        tv6.setText(end[0] + " " + end[1]);
+
+
+        // get memebrs
+        Ion.with(this)
+                .load("http://198.199.98.53/scripts/get_event_users.php?id=" + ListGroups.listItems.get(selectedGroup).id)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            String json_str = result.getAsJsonArray("event_users").toString();
+
+
+                            JSONArray jsonArray = new JSONArray(json_str);
+                            event_users.clear();
+                            System.err.println("length of array is : " + jsonArray.length());
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject obj = jsonArray.getJSONObject(i);
+                                event_users.add(obj.get("user").toString());
+                            }
+                            System.err.println("length of event users is : " + event_users.size());
+
+
+                        } catch (Exception ex) {
+                            System.err.println(ex.getMessage());
+                        }
+                        String user_members = "";
+                        if (event_users.size() != 0) {
+                            user_members += event_users.get(0);
+                            System.err.println("user members : " + user_members);
+                            for (int i = 1; i < event_users.size(); i++) {
+
+                                user_members += "\n" + event_users.get(i);
+                                System.err.println("user members : " + user_members);
+                            }
+                        }
+
+                        System.err.println("printing members : " + user_members);
+
+                        TextView tv7 = (TextView) findViewById(R.id.Members);
+                        tv7.setText(user_members);
+
+                        ListGroups.updateList();
+
+                    }
+                });
     }
 
 }

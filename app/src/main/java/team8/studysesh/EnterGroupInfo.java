@@ -276,13 +276,19 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
 
     public void postEventData(View view) {
         EditText theClass = (EditText) findViewById(R.id.theClass);
-        if (theClass.getText().toString().matches("")) {
+        if (theClass.getText().toString().matches("") ||
+                startDateInput.getText().toString().matches("") ||
+                startTimeInput.getText().toString().matches("") ||
+                startDateInput.getText().toString().matches("") ||
+                startTimeInput.getText().toString().matches("")
+                ) {
             Toast.makeText(getApplicationContext(), R.string.retry_enter_group_info, Toast.LENGTH_SHORT).show();
             return;
         }
         EditText location = (EditText) findViewById(R.id.autocomplete_places);
         EditText capacity = (EditText) findViewById(R.id.capacity);
         EditText description = (EditText) findViewById(R.id.description);
+
 
         String str_owner = LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0];
         System.err.println(LoginActivity.userIndex);
@@ -300,10 +306,15 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         else
             str_description = "Lets study ";// + str_courseTitle;
 
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
-        Date theDate = new Date();
-        String str_startTime = dateFormat.format(theDate).toString();
+//        DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+//        Date theDate = new Date();
+//        String str_startTime = dateFormat.format(theDate).toString();
+        String str_startTime = startDateInput.getText().toString() + ";"
+                + startTimeInput.getText().toString() + "@"
+                + endDateInput.getText().toString() + ";"
+                + endTimeInput.getText().toString();
 
+        System.err.println(str_startTime);
         System.out.println( str_owner );
 
         Ion.with(this)
@@ -359,14 +370,14 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
     /////////////date time///////////////////
     private void updateStartDateLabel() {
 
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "MM/dd/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         startDateInput.setText(sdf.format(myCalendar.getTime()));
     }
     private void updateEndDateLabel() {
 
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "MM/dd/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         endDateInput.setText(sdf.format(myCalendar.getTime()));

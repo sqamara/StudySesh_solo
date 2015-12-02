@@ -29,12 +29,17 @@ public class StudyGroupModel {
         cap = inputCapacity;
         members = numMembers;
         description = inputDescription;
-        time = inputTime;
+        time = inputTime; // looks like  MM/dd/yyyy;HH:mm@MM/dd/yy;HH:mm
     }
 
     public String toString() {
-        String toReturn = theClass + "<br>" + "Started: "+ time
-                + "<br>Location: " + location + "<br>Capacity: " + members +"/" + cap;
+        String[] startEnd = time.split("@");
+        String[] start = startEnd[0].split(";");
+        String[] end = startEnd[1].split(";");
+
+        String toReturn = theClass + "<br>" + "Start: "+ start[0] + " " + start[1] + "<br>End: " +
+                end[0] + " " + end[1] + "<br>Location: " + location + "<br>Capacity: "
+                + members +"/" + cap;
         return toReturn;
     }
 }

@@ -17,7 +17,7 @@
     <string name="error_email_already_exists">This email is already registered</string>
     <string name="error_account_DNE">No account found</string>
     <string name="confirm_registered">Email/Password Registered</string>
-    <string name="retry_enter_group_info">Please enter a class name</string>
+    <string name="retry_enter_group_info">A class name, dates and times are required</string>
 
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
