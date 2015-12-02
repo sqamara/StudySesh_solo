@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             add("bar@example.com:world");
             add("sqamara@ucsd.edu:12345");
     }};
-    public static int userIndex = -1;
+    public static int userIndex;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        userIndex = -1;
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
