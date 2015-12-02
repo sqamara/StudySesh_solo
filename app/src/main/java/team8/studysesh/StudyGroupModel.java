@@ -15,16 +15,19 @@ public class StudyGroupModel {
     public int cap = 0;
     public String description = "";
     public int members = 0;
-    public String time = "";
+    public String time = ""; // time created
     public String id = "";
 
+    public String startTime = "";
+    public String endTime = "";
+
     StudyGroupModel(String inputOwner, String inputClass, String inputLocation, int inputCapacity,
-                    String inputDescription, String inputTime) {
+                    String inputDescription, String inputTime, int numMembers) {
         owner = inputOwner;
         theClass = inputClass;
         location = inputLocation;
         cap = inputCapacity;
-        members = 1;
+        members = numMembers;
         description = inputDescription;
         time = inputTime;
     }

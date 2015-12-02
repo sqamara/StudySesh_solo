@@ -1,6 +1,8 @@
 package team8.studysesh;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,8 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,7 +30,9 @@ import com.koushikdutta.ion.Ion;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -55,6 +60,45 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
     // ASyncTask TAG log
     private static final String TAG = "post_event";
 
+    // for date time
+    Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener startDate;
+    EditText startDateInput;
+    DatePickerDialog.OnDateSetListener endDate;
+    EditText endDateInput;
+
+    EditText startTimeInput;
+    EditText endTimeInput;
+
+
+
+    /// second version
+    DateFormat formatDateTime=DateFormat.getDateTimeInstance();
+    Calendar dateTime=Calendar.getInstance();
+
+    public void chooseStartTime(){
+        new TimePickerDialog(this, t_start, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), true).show();
+    }
+    public void chooseEndTime(){
+        new TimePickerDialog(this, t_end, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), true).show();
+    }
+
+    TimePickerDialog.OnTimeSetListener t_start = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateTime.set(Calendar.MINUTE,minute);
+            updateStartTimeLabel();
+        }
+    };
+    TimePickerDialog.OnTimeSetListener t_end = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateTime.set(Calendar.MINUTE,minute);
+            updateEndTimeLabel();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +148,68 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
             }
         });
 
+        //////for date time/////////////////////////////////////////////////////////////
+        startDate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateStartDateLabel();
+            }
+
+        };
+        startDateInput = (EditText) findViewById(R.id.startDateInput);
+        startDateInput.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(EnterGroupInfo.this, startDate, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        endDate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateEndDateLabel();
+            }
+
+        };
+        endDateInput = (EditText) findViewById(R.id.endDateInput);
+        endDateInput.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(EnterGroupInfo.this, endDate, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        startTimeInput = (EditText) findViewById(R.id.startTimeInput);
+        startTimeInput.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                chooseStartTime();
+            }
+        });
+        endTimeInput = (EditText) findViewById(R.id.endTimeInput);
+        endTimeInput.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                chooseEndTime();
+            }
+        });
 
     }
 
@@ -245,6 +351,39 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         Toast.makeText(this,
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
+    /////////////date time///////////////////
+    private void updateStartDateLabel() {
+
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        startDateInput.setText(sdf.format(myCalendar.getTime()));
+    }
+    private void updateEndDateLabel() {
+
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        endDateInput.setText(sdf.format(myCalendar.getTime()));
+    }
+    private void updateStartTimeLabel() {
+
+        String myFormat = "HH:MM"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        startTimeInput.setText(sdf.format(dateTime.getTime()));
+    }
+    private void updateEndTimeLabel() {
+
+        String myFormat = "HH:MM"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        endTimeInput.setText(sdf.format(dateTime.getTime()));
     }
 
 }

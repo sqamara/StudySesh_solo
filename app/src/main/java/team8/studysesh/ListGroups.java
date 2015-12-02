@@ -184,6 +184,7 @@ public class ListGroups extends ListActivity {
         public final static String DESCRIPTION = "description";
         public final static String ID = "id";
         public final static String OWNER = "owner";
+        public final static String MEMBERS = "members";
 
         public SingleEventData(JSONObject json_event){
             try {
@@ -194,6 +195,7 @@ public class ListGroups extends ListActivity {
                 description = json_event.get(DESCRIPTION).toString();
                 id = json_event.get(ID).toString();
                 owner = json_event.get(OWNER).toString();
+                members = json_event.get(MEMBERS).toString();
             }catch(JSONException e){
                 e.printStackTrace();
             }
@@ -206,6 +208,7 @@ public class ListGroups extends ListActivity {
         String description;
         String id;
         String owner;
+        String members;
     }
 
     public static void updateList() {
@@ -233,7 +236,9 @@ public class ListGroups extends ListActivity {
                                     data.course_title, data.location,
                                     Integer.parseInt(data.capacity),
                                     data.description,
-                                    data.start_time);
+                                    data.start_time,
+                                    Integer.parseInt(data.members)
+                            );
                             element.id = data.id;
                             listItems.add(element);
                         }
