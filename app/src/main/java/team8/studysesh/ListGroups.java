@@ -1,6 +1,7 @@
 package team8.studysesh;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,20 +35,16 @@ public class ListGroups extends ListActivity {
     public static ArrayAdapter<StudyGroupModel> adapter;
 
     private String m_Text = "";
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_groups);
-
+        context = this;
         adapter=new ArrayAdapter<StudyGroupModel>(this,
                 android.R.layout.simple_list_item_1,
                 listItems) {
-        @Override
-            public void notifyDataSetChanged() {
-                updateList();
-                super.notifyDataSetChanged();
-            }
         @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -81,8 +78,7 @@ public class ListGroups extends ListActivity {
                 //addNewStudyGroup(view); // using dialog box
             }
         });
-
-        adapter.notifyDataSetChanged();
+        updateList();
 
     }
 
@@ -93,27 +89,6 @@ public class ListGroups extends ListActivity {
 
     @Override
     protected void onListItemClick (ListView l, View v, final int position, long id) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Description:");
-//        builder.setMessage(listItems.get(position).description + "\nOwner: " + listItems.get(position).owner);
-//
-//        // Set up the buttons
-//        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                deleteGroup(position);
-//                dialog.cancel();
-//            }
-//        });
-//
-//
-//        builder.show();
         DisplayGroupInfo.selectedGroup = position;
         goToDisplayGroupInfo();
     }
@@ -167,12 +142,12 @@ public class ListGroups extends ListActivity {
     private void deleteGroup(int position) {
         if (listItems.get(position).owner.equals(LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0])) {
             listItems.remove(position);
-            ListGroups.adapter.notifyDataSetChanged();
+            updateList();
         }
     }
 
     // MUST TAKE JSON ARRAY
-    public List<SingleEventData> getDataForListView(JsonObject json_array){
+    public static List<SingleEventData> getDataForListView(JsonObject json_array){
         List<SingleEventData> list_events = new ArrayList<SingleEventData>();
         String json_str =  json_array.getAsJsonArray("events").toString();
 
@@ -201,7 +176,7 @@ public class ListGroups extends ListActivity {
         return list_events;
     }
 
-    public class SingleEventData{
+    public static class SingleEventData{
         public final static String TITLE = "title";
         public final static String START_TIME = "start_time";
         public final static String LOCATION = "location";
@@ -209,7 +184,6 @@ public class ListGroups extends ListActivity {
         public final static String DESCRIPTION = "description";
         public final static String ID = "id";
         public final static String OWNER = "owner";
-        public final static String MEMBERS = "members";
 
         public SingleEventData(JSONObject json_event){
             try {
@@ -220,7 +194,6 @@ public class ListGroups extends ListActivity {
                 description = json_event.get(DESCRIPTION).toString();
                 id = json_event.get(ID).toString();
                 owner = json_event.get(OWNER).toString();
-                members = json_event.get(MEMBERS).toString();
             }catch(JSONException e){
                 e.printStackTrace();
             }
@@ -233,22 +206,29 @@ public class ListGroups extends ListActivity {
         String description;
         String id;
         String owner;
-        String members;
     }
-    public void updateList() {
-        Ion.with(this)
+
+    public static void updateList() {
+        System.err.println("updating list");
+        Ion.with(context)
                 .load("http://198.199.98.53/scripts/get_event_data.php")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     // PERFORM MAIN OPERATIONS HERE
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        System.err.println("result is null ?  " + result == null);
+                        if (e != null) {
+                            //System.err.println(e.getMessage());
+                            return;
+                        }
                         //Create a List of events
                         List<SingleEventData> list_events = getDataForListView(result);
                         listItems.clear();
 
                         for (int i = list_events.size() - 1; i >= 0; --i) {
                             SingleEventData data = list_events.get(i);
+                            System.err.println("no Null pointer at index " + i + " of " + list_events.size());
                             StudyGroupModel element = new StudyGroupModel(data.owner,
                                     data.course_title, data.location,
                                     Integer.parseInt(data.capacity),
@@ -257,6 +237,7 @@ public class ListGroups extends ListActivity {
                             element.id = data.id;
                             listItems.add(element);
                         }
+                        adapter.notifyDataSetChanged();
                         /*
                         ArrayList<String> desc_list_events = new ArrayList<String>();
 

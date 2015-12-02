@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Search extends ListActivity {
     public static final ArrayList<StudyGroupModel> foundItems=new ArrayList<StudyGroupModel>();
-    public static ArrayAdapter<StudyGroupModel> adapter;
+    public static ArrayAdapter<StudyGroupModel> adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

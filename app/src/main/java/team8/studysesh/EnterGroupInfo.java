@@ -179,6 +179,7 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         EditText description = (EditText) findViewById(R.id.description);
 
         String str_owner = LoginActivity.DUMMY_CREDENTIALS.get(LoginActivity.userIndex).split("@")[0];
+        System.err.println(LoginActivity.userIndex);
         String str_courseTitle = theClass.getText().toString();
         String str_location = mAutocompleteView.getText().toString();
         int inputCapacity;
@@ -220,9 +221,16 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
                     }
                 });
         AlertDialog alert11 = builder1.create();
+        try {
+            System.err.println("sleeping thread");
+            Thread.currentThread().sleep(500);
+        } catch (Exception ex){
+            System.err.println(ex.getMessage());
+        }
+        ListGroups.updateList();
         alert11.show();
 
-        ListGroups.adapter.notifyDataSetChanged();
+        //ListGroups.adapter.notifyDataSetChanged();
         //finish();
     }
 

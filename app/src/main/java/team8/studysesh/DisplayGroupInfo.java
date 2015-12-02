@@ -1,6 +1,8 @@
 package team8.studysesh;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 public class DisplayGroupInfo extends AppCompatActivity {
@@ -56,14 +60,31 @@ public class DisplayGroupInfo extends AppCompatActivity {
                             .load("http://198.199.98.53/scripts/delete_event.php")
                             .setBodyParameter("id", ListGroups.listItems.get(selectedGroup).id)
                             .asString();
-                    ListGroups.listItems.remove(selectedGroup);
-                    ListGroups.adapter.notifyDataSetChanged();
-                    //if () { // check if using search
-                    Search.foundItems.clear();
-                    Search.adapter.notifyDataSetChanged();
-                    //}
-                    finish();
 
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                    builder1.setMessage("Success.");
+                    builder1.setCancelable(true);
+                    builder1.setPositiveButton("Okay",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                    finish();
+                                }
+                            });
+                    AlertDialog alert11 = builder1.create();
+
+                    try {
+                        System.err.println("sleeping thread");
+                        Thread.currentThread().sleep(500);
+                    } catch (Exception ex){
+                        System.err.println(ex.getMessage());
+                    }
+
+                    ListGroups.updateList();
+                    Search.foundItems.clear();
+                    if (Search.adapter != null)
+                        Search.adapter.notifyDataSetChanged();
+                    alert11.show();
                 }
             }
         });
