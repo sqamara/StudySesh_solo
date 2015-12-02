@@ -52,9 +52,9 @@ public class ListGroups extends ListActivity {
                 String[] pieces = listItems.get(position).toString().split("<br>", 2);
                 text.setText(Html.fromHtml("<b>" + pieces[0] + "<br>" + "</b>" + "<small>" + pieces[1] + "</small>"));
                 if (position%2 == 0)
-                    view.setBackgroundColor(Color.LTGRAY);
+                    view.setBackgroundColor(0x80d3d3d3);
                 else
-                    view.setBackgroundColor(Color.TRANSPARENT);
+                    view.setBackgroundColor(0x40d3d3d3);
 
             return view;
             }
