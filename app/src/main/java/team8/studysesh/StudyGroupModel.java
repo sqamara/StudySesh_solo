@@ -27,7 +27,7 @@ public class StudyGroupModel {
         theClass = inputClass;
         location = inputLocation;
         cap = inputCapacity;
-        members = numMembers;
+        members = numMembers+1;
         description = inputDescription;
         time = inputTime; // looks like  MM/dd/yyyy;HH:mm@MM/dd/yy;HH:mm
     }
