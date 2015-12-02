@@ -279,8 +279,8 @@ public class EnterGroupInfo extends AppCompatActivity implements GoogleApiClient
         if (theClass.getText().toString().matches("") ||
                 startDateInput.getText().toString().matches("") ||
                 startTimeInput.getText().toString().matches("") ||
-                startDateInput.getText().toString().matches("") ||
-                startTimeInput.getText().toString().matches("")
+                endDateInput.getText().toString().matches("") ||
+                endTimeInput.getText().toString().matches("")
                 ) {
             Toast.makeText(getApplicationContext(), R.string.retry_enter_group_info, Toast.LENGTH_SHORT).show();
             return;

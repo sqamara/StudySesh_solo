@@ -24,7 +24,11 @@ import org.json.JSONObject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ListGroups extends ListActivity {
 
@@ -79,6 +83,17 @@ public class ListGroups extends ListActivity {
             }
         });
         updateList();
+
+        /////////////for auto update///////////////////
+        Timer timer = new Timer ();
+        TimerTask hourlyTask = new TimerTask () {
+            @Override
+            public void run () {
+                updateList();
+            }
+        };
+        //update every min
+        timer.schedule(hourlyTask, 0l, 1000 * 60 );
 
     }
 
@@ -242,6 +257,23 @@ public class ListGroups extends ListActivity {
                             element.id = data.id;
                             listItems.add(element);
                         }
+                        Collections.sort(listItems, new Comparator<StudyGroupModel>() {
+                            @Override
+                            public int compare(StudyGroupModel o1, StudyGroupModel o2){
+                                String[] o1startEnd = o1.time.split("@");
+                                String[] o1end = o1startEnd[1].split(";");
+                                String[] o1date = o1end[0].split("/");
+                                String o1ordered = o1date[2] + o1date[0] + o1date[1] + o1end[1];
+
+
+                                String[] o2startEnd = o2.time.split("@");
+                                String[] o2end = o2startEnd[1].split(";");
+                                String[] o2date = o2end[0].split("/");
+                                String o2ordered = o2date[2] + o2date[0] + o2date[1] + o2end[1];
+
+                                return o1ordered.compareTo(o2ordered);
+                            }
+                        });
                         adapter.notifyDataSetChanged();
                         /*
                         ArrayList<String> desc_list_events = new ArrayList<String>();
