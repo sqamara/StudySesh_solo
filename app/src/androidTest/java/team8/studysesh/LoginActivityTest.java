@@ -7,13 +7,14 @@ import android.test.TouchUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
  * Created by sebastian on 12/2/15.
  */
-public class LoginTest
+public class LoginActivityTest
         extends ActivityInstrumentationTestCase2<LoginActivity> {
 
     private LoginActivity testLoginActivity;
@@ -24,7 +25,7 @@ public class LoginTest
     private Instrumentation testInstrumentation;
     private Instrumentation.ActivityMonitor monitor;
     private ListGroups testListGroups;
-    public LoginTest() {
+    public LoginActivityTest() {
         super(LoginActivity.class);
     }
 
@@ -110,6 +111,10 @@ public class LoginTest
         // when the register button is pressed
         TouchUtils.clickView(this, register);
         // then save the credentials
+        try {
+            // give time to load and wait for server interaction
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {}
         assertTrue(testLoginActivity.DUMMY_CREDENTIALS.contains(timeStamp + "@ucsd.edu:zzzzz"));
     }
 
